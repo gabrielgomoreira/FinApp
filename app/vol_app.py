@@ -22,6 +22,7 @@ from statistics import mean
 
 
 df = pd.read_json('../db_scripts/sp500companiesFolder/FB.json')['dataset']
+days = 252
 
 close_price = []
 dates = []
@@ -30,9 +31,22 @@ for d in reversed(df['data']):
 	close_price += [d[11]]
 
 
-x = [dt.datetime.strptime(d,'%Y-%m-%d').date() for d in dates]
+x_axis = [dt.datetime.strptime(d,'%Y-%m-%d').date() for d in dates]
 
-plt.plot(x, close_price)
-plt.ylabel('some numbers')
+sp0 = close_price[-days:]
+sp1 = sp0[1:]
+zip_sp = zip(sp1,sp0)
+log_diff = lambda d2, d1: np.log(d2/d1)
+
+rt = [np.sqrt(days) * log_diff(d2,d1) for d2, d1 in zip_sp]
+vol = np.sqrt(np.var(rt))
+print(vol)
+
 plt.show()
+
+# plt.plot(x_axis, close_price)
+# plt.ylabel('some numbers')
+# plt.show()
+
+# daily calculation
 
