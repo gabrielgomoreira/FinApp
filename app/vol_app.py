@@ -28,39 +28,18 @@ def window_vol_list(window, daily_log_rets, hor_sqr):
 		vol_list += [np.std(daily_log_rets[(d-(window-1)):d]) * 100 * hor_sqr]
 	return vol_list
 
-
-def func():
-	df = pd.read_json('../db_scripts/sp500companiesFolder/FB.json')['dataset']
-	horizon = 252
-	hor_sqr = np.sqrt(horizon)
-	# window = 7
-
+def get_adjclose_dates(df):
 	close_price = []
 	dates = []
 	for d in reversed(df['data']):
 		dates += [d[0]]
-		close_price += [d[11]]
-
+		close_price += [d[11]] # adjusted close
 
 	x_axis = [dt.datetime.strptime(d,'%Y-%m-%d').date() for d in dates]
 
-	sp0 = close_price[-(horizon+1):]
-	zip_sp = zip(sp0[1:],sp0)
+	return {'Dates':x_axis, 'Adjusted_Close': close_price}
 
-	#logarithimic price changes
-	log_diff = lambda d2, d1: np.log(d2/d1)
-	daily_log_rets = [log_diff(d2,d1) for d2, d1 in zip_sp]
-	avg_stdev_daily_vol = np.std(daily_log_rets)
-	annualized_vol = hor_sqr * avg_stdev_daily_vol * 100
-
-	vol_lists = []
-	size = len(daily_log_rets)
-	for window in range(2, 24):
-		if(size % window == 0):
-			vol_lists += [window_vol_list(window,daily_log_rets,hor_sqr)]
-	window_vol_list(window,daily_log_rets,hor_sqr)
-
-	print('Annualized vol: %f' % annualized_vol)
+def plot_vol_graph(vol_lists, vol_horizon, horizon):
 	for vol_lt in vol_lists:
 		label_name = "Window: " + str(horizon-len(vol_lt))
 		plt.plot(vol_lt, label=label_name)
@@ -69,11 +48,37 @@ def func():
 	plt.legend(bbox_to_anchor=(1.05, 1), loc=5, borderaxespad=0)
 	plt.show()
 
+def calculate_vol(ticker, horizon=252):
+	company_json = '../db_scripts/sp500companiesFolder/'+ticker.upper()+'.json'
+	df = pd.read_json(company_json)['dataset']
+	hor_sqr = np.sqrt(horizon)
+
+	date_and_close = get_adjclose_dates(df)
+
+	sp0 = date_and_close['Adjusted_Close'][-(horizon+1):]
+	zip_sp = zip(sp0[1:],sp0)
+
+	#logarithimic price changes
+	log_diff = lambda d2, d1: np.log(d2/d1)
+	daily_log_rets = [log_diff(d2,d1) for d2, d1 in zip_sp]
+	avg_stdev_daily_vol = np.std(daily_log_rets)
+	vol_horizon = hor_sqr * avg_stdev_daily_vol * 100
+
+	vol_lists = []
+	size = len(daily_log_rets)
+	for window in range(2, 24):
+		if(size % window == 0):
+			vol_lists += [window_vol_list(window,daily_log_rets,hor_sqr)]
+
+	plot_vol_graph(vol_lists, vol_horizon, horizon)
+
+	return vol_horizon
+
 # plt.plot(x_axis, close_price)
 # plt.ylabel('some numbers')
 # plt.show()
 
 # daily calculation
 
-func()
+calculate_vol('GS')
 
