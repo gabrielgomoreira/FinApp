@@ -23,9 +23,9 @@ from statistics import mean
 def window_vol_list(window, daily_log_rets, hor_sqr):
 
 	vol_list = []
-	print(len(daily_log_rets))
-	for d in range(window-1, len(daily_log_rets)):
-		vol_list += [np.std(daily_log_rets[(d-(window-1)):d]) * 100 * hor_sqr]
+
+	for d in range(window, len(daily_log_rets)):
+		vol_list += [np.std(daily_log_rets[(d-(window)):d]) * 100 * hor_sqr]
 	return vol_list
 
 def get_adjclose_dates(df):
@@ -36,24 +36,29 @@ def get_adjclose_dates(df):
 		close_price += [d[11]] # adjusted close
 
 	x_axis = [dt.datetime.strptime(d,'%Y-%m-%d').date() for d in dates]
+	name = df['name'].split('Prices,')[0]
+	return {'Dates':x_axis, 'Adjusted_Close': close_price, 'Name':name}
 
-	return {'Dates':x_axis, 'Adjusted_Close': close_price}
-
-def plot_vol_graph(vol_lists, vol_horizon, horizon):
+def plot_vol_graph(vol_lists, vol_horizon, comp_name, horizon):
 	for vol_lt in vol_lists:
 		label_name = "Window: " + str(horizon-len(vol_lt))
 		plt.plot(vol_lt, label=label_name)
 
 	# plt.plot(sp0[6:], label='wok plz')
-	plt.legend(bbox_to_anchor=(1.05, 1), loc=5, borderaxespad=0)
+	plt.legend(bbox_to_anchor=(1.05, 1), loc=0, borderaxespad=0)
+	plt.title(comp_name)
+
 	plt.show()
 
 def calculate_vol(ticker, horizon=252):
-	company_json = '../db_scripts/sp500companiesFolder/'+ticker.upper()+'.json'
-	df = pd.read_json(company_json)['dataset']
+	ticker = ticker.upper()
 	hor_sqr = np.sqrt(horizon)
 
+	company_json = '../db_scripts/sp500companiesFolder/'+ticker+'.json'
+	df = pd.read_json(company_json)['dataset']
+
 	date_and_close = get_adjclose_dates(df)
+	comp_name = date_and_close['Name']
 
 	sp0 = date_and_close['Adjusted_Close'][-(horizon+1):]
 	zip_sp = zip(sp0[1:],sp0)
@@ -66,11 +71,13 @@ def calculate_vol(ticker, horizon=252):
 
 	vol_lists = []
 	size = len(daily_log_rets)
-	for window in range(2, 24):
+	for window in range(2, 4):
 		if(size % window == 0):
+			print(window)
 			vol_lists += [window_vol_list(window,daily_log_rets,hor_sqr)]
 
-	plot_vol_graph(vol_lists, vol_horizon, horizon)
+	# print(vol_lists)	
+	plot_vol_graph(vol_lists, vol_horizon, comp_name, horizon)
 
 	return vol_horizon
 
