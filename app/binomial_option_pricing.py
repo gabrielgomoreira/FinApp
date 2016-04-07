@@ -3,15 +3,20 @@
 import numpy as np
 import pprint
 
-rate = 0.04
+american = True
+call = False
+
+stock_price = 41
+k_strike = 40
+rate = 0.08
 div=0
-n_period = 2
-h_period= (1/12)
-vol = 0.9
-stock_price = 3.16
-call = True
-k_strike = 3
-american = False
+t_time = 1
+n_period = 3
+h_period= (t_time/n_period)
+vol = 0.3
+
+
+
 
 
 def get_up_down():
@@ -28,7 +33,7 @@ def calculate_period_price(r_neutral_prob=0.5, opt_up=0, opt_down=0):
 	return pv * price
 
 def calculate_stock_prices(stock_price, up, down, n_period):
-	s_price_tree = {0:stock_price}
+	s_price_tree = {0:[stock_price]}
 	for period in range(1, n_period+1):
 		sprices_for_period = []
 		if(period == 1): # first istance
@@ -68,7 +73,7 @@ def calculate_option_from_tree(s_price_tree, r_neutral_prob, k_strike, call=True
 				cd = max(early_down,0)
 
 				optprice_period += [cu,cd]
-				print(cu,cd)
+
 		else:
 			for i in range(0,len(opt_price_tree[period+1]),2):
 				last_cu = opt_price_tree[period+1][i]
@@ -77,11 +82,10 @@ def calculate_option_from_tree(s_price_tree, r_neutral_prob, k_strike, call=True
 				cp = 0
 
 				if(american):
-					sp = s_price_tree[period][i]
-					if(call):
-						cp = max(su-k_strike,0)
-					else:
-						cp = max(k_strike-su,0)
+					sp = s_price_tree[period][i//2]
+					early = (sp-k_strike) if call else (k_strike-sp)
+					cp = max(early,0)
+
 
 				calculated_cp = calculate_period_price(r_neutral_prob, last_cu, last_cd)
 				cp = max(cp, calculated_cp)
@@ -92,6 +96,12 @@ def calculate_option_from_tree(s_price_tree, r_neutral_prob, k_strike, call=True
 
 	return opt_price_tree
 
+def get_from_putcall_parity(opt_price, call):
+	cash = k_strike*np.exp(-(rate-div)*h_period)
+	if(call):
+		return opt_price+cash-stock_price
+	else:
+		return opt_price+stock_price-cash
 
 
 def setup():
@@ -99,7 +109,13 @@ def setup():
 	r_neutral_prob = get_risk_neutral_prob(up, down)
 	s_price_tree = calculate_stock_prices(stock_price, up, down, n_period)
 	opt_price_tree = calculate_option_from_tree(s_price_tree, r_neutral_prob, k_strike=k_strike, call=call, american=american)
-	opt_type = 'Call' if call else 'Put'
+	final_opt1_price = opt_price_tree[0][0]
+	opt1_type = 'Call' if call else 'Put'
+	print('Price of %s at K strike %f is: %f'%(opt1_type, k_strike, final_opt1_price))
+	opt2_type = 'Call' if not call else 'Put'
+	final_opt2_price = get_from_putcall_parity(final_opt1_price,call)
+	print('Price of %s at K strike %f is: %f'%(opt2_type, k_strike, final_opt2_price))
+
 
 
 setup()
