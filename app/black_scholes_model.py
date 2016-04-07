@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 import collections
 import scipy.stats as st
 
-call = False
+call = True
 
 stock_price = 315
 k_strike = 300
@@ -26,10 +26,18 @@ def get_normal_cdf(distributions, call):
 		distributions = [ -d for d in distributions]
 	return [st.norm.cdf(d) for d in distributions]
 
+def calculate_option_price(probs, call):
+	first_half = stock_price * np.exp(-div*t_time)*probs[0]
+	second_half = k_strike * np.exp(-rate*t_time)*probs[1]
+	opt_price = first_half - second_half if call else second_half - first_half
+	return opt_price
+
 def setup():
 	distributions = get_d1_d2()
 	print(distributions)
 	probs = get_normal_cdf(distributions,call)
 	print(probs)
+	opt_price = calculate_option_price(probs, call)
+	print(opt_price)
 
 setup()
