@@ -5,14 +5,14 @@ import matplotlib.pyplot as plt
 import collections
 
 american = True
-call = False
+call = True
 
 stock_price = 41
 k_strike = 40
 rate = 0.08
 div=0
 t_time = 1
-n_period = 100
+n_period = 20
 h_period= (t_time/n_period)
 vol = 0.3
 
@@ -106,9 +106,10 @@ def get_probabilties(price_tree):
 	final_period = len(price_tree)-1
 	price_list = price_tree[final_period]
 	total = len(price_list)
-
+	print(total)
 	for i in range(total):
-		price = price_list[i]
+		price = '%.3f' %price_list[i]
+
 		probabilities[price] = 1 if price not in probabilities else (probabilities[price]+1)
 
 	return probabilities
@@ -139,6 +140,9 @@ def setup():
 	up, down = get_up_down()
 	r_neutral_prob = get_risk_neutral_prob(up, down)
 	s_price_tree = calculate_stock_prices(stock_price, up, down, n_period)
+	# probabilities = get_probabilties(s_price_tree)
+	# graph_probabilities(probabilities)
+
 	opt_price_tree = calculate_option_from_tree(s_price_tree, r_neutral_prob, k_strike=k_strike, call=call, american=american)
 	final_opt1_price = opt_price_tree[0][0]
 	opt1_type = 'Call' if call else 'Put'
