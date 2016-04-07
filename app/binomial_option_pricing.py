@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import numpy as np
+import pprint
 
 rate = 0.04
 div=0
@@ -9,7 +10,7 @@ h_period= (1/12)
 vol = 0.9
 stock_price = 3.16
 call = True
-k_strike = 100
+k_strike = 3
 american = False
 
 
@@ -50,6 +51,7 @@ def calculate_stock_prices(stock_price, up, down, n_period):
 def calculate_option_from_tree(s_price_tree, r_neutral_prob, k_strike, call=True, american=True):
 	opt_price_tree = {}
 	tree_size = len(s_price_tree)-1
+
 	
 	for period in range(tree_size,-1,-1):
 		optprice_period = []
@@ -59,18 +61,18 @@ def calculate_option_from_tree(s_price_tree, r_neutral_prob, k_strike, call=True
 				su = s_price_tree[period][i]
 				sd = s_price_tree[period][i+1]
 				cu = cd = 0
-				if(call):
-					cu = max(su-k_strike,0)
-					cd = max(sd-k_strike,0)
-				else:
-					cu = max(k_strike-su,0)
-					cd = max(k_strike-sd,0)
+				early_up = (su-k_strike) if call else (k_strike-su)
+				early_down = (sd-k_strike) if call else (k_strike-sd)
+				
+				cu = max(early_up,0)
+				cd = max(early_down,0)
 
 				optprice_period += [cu,cd]
+				print(cu,cd)
 		else:
-			for i in range(0,len(optprice_period[period+1]),2):
-				last_cu = optprice_period[period+1][i]
-				last_cd = optprice_period[period+1][i+1]
+			for i in range(0,len(opt_price_tree[period+1]),2):
+				last_cu = opt_price_tree[period+1][i]
+				last_cd = opt_price_tree[period+1][i+1]
 
 				cp = 0
 
@@ -97,6 +99,7 @@ def setup():
 	r_neutral_prob = get_risk_neutral_prob(up, down)
 	s_price_tree = calculate_stock_prices(stock_price, up, down, n_period)
 	opt_price_tree = calculate_option_from_tree(s_price_tree, r_neutral_prob, k_strike=k_strike, call=call, american=american)
-	print(opt_price_tree)
+	opt_type = 'Call' if call else 'Put'
+
 
 setup()
