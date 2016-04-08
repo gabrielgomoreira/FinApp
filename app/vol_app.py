@@ -71,7 +71,7 @@ def plot_vol_graph(vol_lists, vol_horizon, date_and_close):
 
 	for vol_lt in vol_lists:
 		label_name = "Window: " + str(horizon-len(vol_lt))
-		print(len(dates) == len(vol_lt))
+		# print(len(dates) == len(vol_lt))
 		plt.plot(vol_lt, label=label_name)
 
 
@@ -104,11 +104,11 @@ def calculate_vol(ticker):
 	size = len(daily_log_rets)
 	for window in range(2, 5):
 		if(size % window == 0):
-			print(window)
+			# print(window)
 			vol_lists += [window_vol_list(window,daily_log_rets,hor_sqr)]
 
 	# print(vol_lists)	
-	plot_vol_graph(vol_lists, vol_horizon, date_and_close)
+	# plot_vol_graph(vol_lists, vol_horizon, date_and_close)
 
 	return vol_horizon
 

@@ -150,7 +150,7 @@ def setup():
 	opt2_type = 'Call' if not call else 'Put'
 	final_opt2_price = get_from_putcall_parity(final_opt1_price,call)
 	print('Price of %s at K strike %f is: %f'%(opt2_type, k_strike, final_opt2_price))
-	probabilities = get_probabilties(opt_price_tree)
+	probabilities = get_probabilties(s_price_tree)
 	graph_probabilities(probabilities)
 
 

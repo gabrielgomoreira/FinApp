@@ -4,15 +4,16 @@ import numpy as np
 import matplotlib.pyplot as plt
 import collections
 import scipy.stats as st
+from vol_app import calculate_vol
 
 call = True
 
-stock_price = 315
-k_strike = 300
-rate = 0.04
+stock_price = 150.47
+k_strike = 170
+rate = 0.025
 div=0
-vol = 0.9
-t_time = 1/52
+vol = calculate_vol('GOOG')/100
+t_time = 1
 
 
 def get_d1_d2():
@@ -34,9 +35,7 @@ def calculate_option_price(probs, call):
 
 def setup():
 	distributions = get_d1_d2()
-	print(distributions)
 	probs = get_normal_cdf(distributions,call)
-	print(probs)
 	opt_price = calculate_option_price(probs, call)
 	print(opt_price)
 
