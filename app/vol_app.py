@@ -112,6 +112,8 @@ def calculate_vol(ticker):
 
 	return vol_horizon
 
+def get_vol_from_pandas()
+
 # plt.plot(x_axis, close_price)
 # plt.ylabel('some numbers')
 # plt.show()
