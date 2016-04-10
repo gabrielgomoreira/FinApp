@@ -21,7 +21,6 @@ class Black_Scholes:
 		self.rate = rate
 		self.div = div
 
-		
 	def get_d1_d2(self):
 		period_vol = self.vol * np.sqrt(self.t_time)
 		d1 = (np.log(self.stock_price/self.k_strike) + (self.rate-self.div+ ((self.vol**2)/2))*self.t_time)/period_vol

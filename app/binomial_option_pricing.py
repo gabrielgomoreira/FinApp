@@ -15,6 +15,7 @@ class Binomial_Model:
 	n_period = 3
 	h_period= 4
 	vol = 0.3
+	probabilities = 0
 
 	def __init__(self, american, call,
 				stock_price, k_strike, t_time, vol, rate, n_period, div):
@@ -28,6 +29,7 @@ class Binomial_Model:
 		self.n_period = n_period
 		self.div = div
 		self.h_period = (t_time/n_period)
+		self.probabilities = 0
 
 
 	def get_up_down(self):
@@ -124,24 +126,24 @@ class Binomial_Model:
 
 			probabilities[price] = 1 if price not in probabilities else (probabilities[price]+1)
 
-		return probabilities
+		self.probabilities = probabilities
+		return self.probabilities
 
-	def graph_probabilities(self, probabilities):
-
-		od = collections.OrderedDict(sorted(probabilities.items()))
-		keys = 	list(od.keys())
-		vals = list(od.values())
-
-		max_key = max(probabilities, key=probabilities.get)
-		print(max_key) #55
-
-		width = 1/1.5
-
-		plt.title('Distributed chances')
-		plt.bar(keys,vals, width, color='blue')
-		plt.ylabel('Chance')
-		plt.xlabel('Price')
-		plt.show()
+	def get_mean_stdev_from_probs(self):
+		mean = 0
+		count = 0
+		for price in self.probabilities:
+			count_int = int(self.probabilities[price])
+			self.probabilities[price] = count_int
+			mean += float(price) * count_int
+			count += count_int
+		mean /= count
+		var = 0
+		for price in self.probabilities:
+			var += ((float(price) - mean)**2) * self.probabilities[price]
+		var /= (count-1)
+		stdev = np.sqrt(var)
+		return {'mean':mean, 'stdev':stdev, 'var':var}
 
 	def get_option_price(self):
 		up, down = self.get_up_down()
@@ -149,11 +151,5 @@ class Binomial_Model:
 		s_price_tree = self.calculate_stock_prices(self.stock_price, up, down, self.n_period)
 		opt_price_tree = self.calculate_option_from_tree(s_price_tree, r_neutral_prob, k_strike=self.k_strike, call=self.call, american=self.american)
 		final_opt1_price = opt_price_tree[0][0]
+		self.get_probabilties(s_price_tree)
 		return final_opt1_price
-		# opt1_type = 'Call' if call else 'Put'
-		# print('Price of %s at K strike %f is: %f'%(opt1_type, k_strike, final_opt1_price))
-		# opt2_type = 'Call' if not call else 'Put'
-		# final_opt2_price = self.get_from_putcall_parity(final_opt1_price,call)
-		# print('Price of %s at K strike %f is: %f'%(opt2_type, k_strike, final_opt2_price))
-		# probabilities = self.get_probabilties(s_price_tree)
-		# self.graph_probabilities(probabilities)

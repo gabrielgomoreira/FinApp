@@ -6,13 +6,13 @@ from option import Option
 
 
 american = False
-call = False
+call = True
 ticker = 'GS'
 t_time = 1
 
 stock_price = 41
-k_strike = 40
-n_period = 3
+k_strike = 44
+n_period = 20
 rate = 0.08
 div = 0
 h_period = 0
@@ -45,10 +45,11 @@ def get_values():
 	# bs_price = black_scholes_opt.get_option_price()
 	option_object = Option(american=american,call=call, ticker=ticker, stock_price=stock_price, 
 					k_strike=k_strike, t_time=t_time, vol=vol, rate=rate, n_period=n_period, div=div)
-	black_scholes_price = option.get_black_scholes_price()
-	binomial_model_price = option.get_binomial_model_price()
-	opposite_opt_prices = option.get_from_put_call_parity()
-
+	black_scholes_price = option_object.get_black_scholes_price()
+	binomial_model_price = option_object.get_binomial_model_price()
+	opposite_opt_prices = option_object.get_from_put_call_parity()
+	print(option_object.get_prob_from_zscore())
+	option_object.graph_sprobabilities_bm()
 
 
 
