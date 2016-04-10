@@ -8,6 +8,14 @@ from vol_app import calculate_vol
 
 class Black_Scholes:
 
+	call = True
+	stock_price = 150
+	k_strike = 170
+	t_time = 1
+	vol = 0.25
+	rate = 0.01
+	div = 0
+
 	def __init__(self, call, stock_price, k_strike, t_time, vol, rate, div):
 		self.call = call
 		self.stock_price = stock_price
@@ -17,12 +25,10 @@ class Black_Scholes:
 		self.rate = rate
 		self.div = div
 
-		self.setup()
-
 		
 	def get_d1_d2(self):
-		period_vol = vol * np.sqrt(t_time)
-		d1 = (np.log(stock_price/k_strike) + (rate-div+ ((vol**2)/2))*t_time)/period_vol
+		period_vol = self.vol * np.sqrt(self.t_time)
+		d1 = (np.log(self.stock_price/self.k_strike) + (self.rate-self.div+ ((self.vol**2)/2))*self.t_time)/period_vol
 		d2 = d1 - period_vol
 		return d1,d2
 
@@ -32,13 +38,13 @@ class Black_Scholes:
 		return [st.norm.cdf(d) for d in distributions]
 
 	def calculate_option_price(self, probs, call):
-		first_half = stock_price * np.exp(-div*t_time)*probs[0]
-		second_half = k_strike * np.exp(-rate*t_time)*probs[1]
+		first_half = self.stock_price * np.exp(-self.div*self.t_time)*probs[0]
+		second_half = self.k_strike * np.exp(-self.rate*self.t_time)*probs[1]
 		opt_price = first_half - second_half if call else second_half - first_half
 		return opt_price
 
-	def setup(self):
+	def get_option_price(self):
 		distributions = self.get_d1_d2()
-		probs = self.get_normal_cdf(distributions,call)
-		opt_price = calculate_option_price(probs, call)
+		probs = self.get_normal_cdf(distributions,self.call)
+		opt_price = self.calculate_option_price(probs, self.call)
 		return opt_price
