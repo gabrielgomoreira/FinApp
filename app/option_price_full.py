@@ -43,9 +43,11 @@ def get_values():
 	# 									k_strike=k_strike, t_time=t_time,
 	# 									vol=vol, rate=rate, div=div)
 	# bs_price = black_scholes_opt.get_option_price()
-	option = Option(american=american,call=call, ticker=ticker, stock_price=stock_price, 
+	option_object = Option(american=american,call=call, ticker=ticker, stock_price=stock_price, 
 					k_strike=k_strike, t_time=t_time, vol=vol, rate=rate, n_period=n_period, div=div)
-	print(option.get_binomial_model_price())
+	black_scholes_price = option.get_black_scholes_price()
+	binomial_model_price = option.get_binomial_model_price()
+	opposite_opt_prices = option.get_from_put_call_parity()
 
 
 
