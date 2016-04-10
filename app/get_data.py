@@ -27,9 +27,9 @@ def setup():
 	dataset = 'S'
 	series_data = get_pandas_series(database, dataset)
 	vol_horizon = 252
-	avg = 0
+	avg = 1
 	get_vol_from_pandas(series_data, vol_horizon=vol_horizon, avg=avg)
 
 
 
-setup()
+# setup()

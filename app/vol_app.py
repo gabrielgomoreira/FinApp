@@ -112,7 +112,7 @@ def calculate_vol(ticker):
 
 	return vol_horizon
 
-def get_vol_from_pandas(series, vol_horizon=252, avg=252):
+def get_vol_from_pandas(series, vol_horizon=252, avg=1):
 	rows_needed = vol_horizon + avg
 	data_to_use = series.tail(rows_needed)
 
@@ -120,7 +120,7 @@ def get_vol_from_pandas(series, vol_horizon=252, avg=252):
 	log_diff = lambda t_1, t_0: np.log(t_1/t_0)
 	daily_log_rets = [log_diff(d2,d1) for d2, d1 in zip_data]
 	avg_stdev_daily_vol = np.std(daily_log_rets) * (vol_horizon**0.5)
-	print(avg_stdev_daily_vol)
+	return avg_stdev_daily_vol
 
 
 

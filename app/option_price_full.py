@@ -1,13 +1,14 @@
 import pandas as pd 
 from get_data import get_pandas_series
 from vol_app import get_vol_from_pandas
+from black_scholes_model import Black_Scholes
 import binomial_option_pricing
-import black_scholes_model
 
-american = 0
-call = 0
-ticker = 0
-t_time = 0
+
+american = True
+call = True
+ticker = 'GS'
+t_time = 1
 
 stock_price = 0
 k_strike = 0
@@ -38,7 +39,8 @@ def get_inputs():
 	return series_data
 def get_values():
 	series_data = get_inputs()
-
+	black_scholes_price = Black_Scholes(call, stock_price, k_strike, t_time, vol, rate, div)
+	print(black_scholes_price)
 
 
 
