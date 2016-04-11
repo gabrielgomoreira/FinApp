@@ -4,6 +4,27 @@
 
 var nflCsControllers = angular.module('nflCsControllers', []);
 
+
+nflCsControllers.controller('OptionCtrl', ['$scope', 'Tests',
+  function($scope, Tests) {
+    
+    var dtData = [];
+    $scope.results = "Tests will display here.";
+    
+    $scope.getOptionPrices = function getOptionPrices() {
+      $scope.results = "Running Tests...";
+
+      Tests.get(function(data){
+      $scope.results = "";
+      for(var test in data) {
+        if(typeof test == "string" && test.indexOf("Test") > -1) {
+          $scope.results+=test+": "+data[test]+"\n";
+        }
+      }
+  });}
+  }]);
+
+
 nflCsControllers.controller('PlayersCtrl', ['$scope', 'Players',
   function($scope, Players) {
     

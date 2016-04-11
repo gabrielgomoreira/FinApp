@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+p {
+	font-size:160%;
+}
+
+</style>
+</head>
+<body>
+	<div class="jumbotron">
+	  <center> 
+	  <h1>Option Pricing Models Research</h1>
+	  <p>Binomial Pricing model and Black Scholes</p> 
+	  </center>
+	</div>
+
+	 <div class="row">
+	 <center>
+	 	<strong><h2>Impacts of increasing binomial periods (n) </h2></strong>
+	   <div class="col-md-10">
+	      
+	      <p> As you increase the number of binomial periods (n) the price begins to converge into the Black Scholes price. This would be similar to estimating the area under a curve using rectangular slices, as the amount of slices approaches infinity (taking the limit), you area estimation converges to the true value. </p> 
+	      <img src="img/research/bm_convergence_to_bs.png" width="80%" height="80%"alt="BM Convergence">
+	     
+	     </div>
+	    <div class="col-md-10">
+	      <center>
+	      <p> Hencemore, as you increase the number of binomial periods (n) the binomial tree branches begin to rejoin (except in case of a discrete dividend). The more possible paths that one can take to reach a certain leaf (the stock price at expiration, S_t) the higher the likelihood that this will be the stock price at expiration. The graph below resembles a normal distribution of the possible outcomes of S_t vs S_t corresponding chance (# possible paths to reach this leaf). In this particular example I am graphing the S_t probabilities where t_time= 1yr, n_periods = 25, ticker='TSLA', stock_price=250.07, and vol = 44.8%.</p> 
+	      <img src="img/research/tsla_distribution.png"  width="80%" height="70%" alt="Normal Distribution">
+	      </center>
+	    </div>
+	 </center>
+	 </div>
+</body>

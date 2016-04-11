@@ -20,3 +20,51 @@
 pre {
 	margin-top: 15px;
 }
+
+
+/******** SPLASH **********/
+
+
+.splash-page {
+	text-align: center;
+	height: 100vh;
+	background-image: url("/static/img/background_nyc.jpg");
+	background-size: cover;
+}
+
+.splash-image {
+	padding-top: 100px;
+	width: 600px;
+	max-width: 75%;
+	-webkit-transition: .5s;
+    -moz-transition: .5s;
+    -o-transition: .5s;
+    transition: .5s;
+	-webkit-keyframes: none;
+
+}
+
+.splash-image:hover {
+	width: 700px;
+	opacity: 1;
+	max-width: 75%;
+	-webkit-transition: .5s;
+    -moz-transition: .5s;
+    -o-transition: .5s;
+    transition: .5s;
+}
+
+div.splash-description {
+	padding-top: 50px;
+}
+.splash-description p {
+	color: white;
+	font-size: 20px;
+}
+
+.footer {
+	padding-top: 10px;
+	font-family: "Marvel";
+	font-weight: 200;
+	color: white;
+}
