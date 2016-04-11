@@ -2,16 +2,21 @@
   <div class="col-md-12">
     <div class="jumbotron">
       <center> 
-        <h1>{{playerName}} <img ng-src="{{team_img}}"></h1>
- 	    <!-- <img ng-src="{{img}}"> -->  
+        <h1>{{teamName}} <img ng-src="{{team_img}}"> </h1> 
       </center>
-      <p class="text-center"><b>Team: </b>{{player.Team}} <b>| Position: </b>{{player.Pos}} <b>| Number of Arrests: </b>{{player.Num_Arrests}} <b>| Last Arrest:</b> {{player.Last_Arrest}}</p>
+      <p class="text-center"><b>City: </b>{{team.city}} <b>| State: </b>{{team.state}} <b>| Mascot: </b>{{team.mascot}} <b>| Division:</b> {{team.division}} <b>| Championships:</b> {{team.championships}}</p>
     </div>
   </div>
 </div>
+<div class="col-md-12">
+  <center> 
+    <crime-categories-pie></crime-categories-pie>
+  </center>
+</div>
+
 <table id="table">
   <thead>
-    <tr><th>Category</th><th>Date</th><th>Encounter</th><th>Description</th><th>Outcome</th></tr>
+    <tr><th class="site_name">Name</th><th>Position</th><th>Category</th><th>Encounter</th><th>Outcome</th></tr>
   </thead>
   <tbody>
   </tbody>
