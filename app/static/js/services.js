@@ -6,21 +6,24 @@ var nflCsServices = angular.module('nflCsServices', ['ngResource']);
 
 nflCsServices.factory('Players',
   function($resource){
-    return $resource('db_scripts/players.json');
+    return $resource('api/players');
   });
 
 nflCsServices.factory('Crimes',
   function($resource){
-    return $resource('db_scripts/crimes.json');
+    return $resource('api/crimes');
   });
 
-
-  
 nflCsServices.factory('Teams',
   function($resource){
-    return $resource('db_scripts/teams.json');
+    return $resource('api/teams');
   });
-
+  
+nflCsServices.factory('Tests',
+  function($resource){
+    return $resource('/api/run_tests');
+  });
+  
 nflCsServices.service('Types',
   function(){
     
@@ -46,26 +49,26 @@ nflCsServices.service('GetPieChartData',
     
     this.getPieChartData = function(tableData, columnToDisplay) {
     
-		var data = []
-						
-		for(var each in tableData) {
+    var data = []
+            
+    for(var each in tableData) {
 
-			if(tableData[each][columnToDisplay] in data) {
-				data[tableData[each][columnToDisplay]].y +=1
-			} else {
-				data[tableData[each][columnToDisplay]] = 
-					{
-						name: tableData[each][columnToDisplay],
-						y: 1
-					};
-			}
-		}
-	
-		var formattedData = [];
-		for(var each in data) {
-			formattedData.push(data[each]);
-		}		
-	
-		return formattedData;
+      if(tableData[each][columnToDisplay] in data) {
+        data[tableData[each][columnToDisplay]].y +=1
+      } else {
+        data[tableData[each][columnToDisplay]] = 
+          {
+            name: tableData[each][columnToDisplay],
+            y: 1
+          };
+      }
+    }
+  
+    var formattedData = [];
+    for(var each in data) {
+      formattedData.push(data[each]);
+    }   
+  
+    return formattedData;
   }
 });
