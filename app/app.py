@@ -23,7 +23,7 @@ def option_pricing_model():
 	print('do i get here?')
 	return render_template('option_pricing_model.html')
 
-@app.route('/option_pricing_view/', methods=['GET'])
+@app.route('/option_pricing_view', methods=['GET'])
 def option_pricing_view():
 	print('----- HEEEREE --------')
 	if request.method == "GET":
@@ -37,14 +37,7 @@ def option_pricing_view():
 		print(joined_parameters)
 
 		return render_template('option_pricing_view.html' ,**joined_parameters)
-	# if request.method == 'POST':
-	# 	american = request.form['american']
-	# 	call = request.form['call']
-	# 	ticker = request.form['ticker']
-	# 	t_time = request.form['t_time']
-	# 	k_strike = request.form['k_strike']
-		# return redirect(url_for('option_pricing_view'))
-		# return redirect(url_for('option_pricing_research'))
+
 
 if __name__ == '__main__':
 	app.run(host='127.0.0.1')
