@@ -18,6 +18,7 @@ class Option:
 	div = 3
 	vol = 0.25
 	h_period = 0
+	stock_name = 'Yet to find'
 
 	black_scholes_opt = 0
 	black_scholes_price = 0
@@ -25,11 +26,12 @@ class Option:
 	binomial_model_price = 0
 
 
-	def __init__(self, american, call, ticker,
+	def __init__(self, american, call, ticker, stock_name, 
 				stock_price, k_strike, t_time, vol, rate, n_period, div):
 		self.american = (american == 'True')
 		self.call = (call == 'True')
 		self.ticker = ticker
+		self.stock_name = stock_name
 		self.stock_price = float(stock_price)
 		self.k_strike = float(k_strike)
 		self.t_time = float(t_time)

@@ -1,4 +1,5 @@
 import pandas as pd 
+import json
 from get_data import get_pandas_series
 from vol_app import get_vol_from_pandas
 from black_scholes_model import Black_Scholes
@@ -74,10 +75,19 @@ def get_values():
 	print('Rand Vars and Prob: %s' % option_object.get_prob_from_zscore())
 	option_object.graph_sprobabilities_bm()
 
+def get_data_set_name(database, dataset):
+	with open('../db_scripts/database_and_dataset_names.json') as json_file:
+		dataset_names = json.load(json_file)
+		if database in dataset_names and dataset in dataset_names[database]:
+			return dataset_names[database][dataset]['name']
+		else:
+			return 'ERROR: Name not found'
+
+
 def calculate_opt_prices(option_parameters):
-
-
+	
 	series_data = get_pandas_series('WIKI', option_parameters['ticker'])
+	stock_name = get_data_set_name('WIKI', option_parameters['ticker'])
 	stock_price = series_data.tail(1)[-1]
 	amount_days = int((t_time*252))
 	
@@ -85,6 +95,7 @@ def calculate_opt_prices(option_parameters):
 
 	option_parameters['stock_price'] = stock_price
 	option_parameters['vol'] = vol
+	option_parameters['stock_name'] = stock_name
 
 	option_object = Option(**option_parameters)
 
@@ -104,7 +115,7 @@ def calculate_opt_prices(option_parameters):
 	opt_name = 'Call' if call else 'Put'
 	opt_inv_name = 'Put' if call else 'Call'
 
-	return {'stock_price':stock_price, 'vol':vol, 'series_data': series_data, 'black_scholes_price': black_scholes_price, 
+	return {'stock_name':stock_name, 'stock_price':stock_price, 'vol':vol, 'series_data': series_data, 'black_scholes_price': black_scholes_price, 
 			'binomial_model_price': binomial_model_price, 'opposite_black_scholes_price': opposite_black_scholes_price,
 			'opposite_binomial_model_price': opposite_binomial_model_price,	'opt_name': opt_name, 'opt_inv_name': opt_inv_name,
 			'mean': mean, 'prob': prob, 'stdev': stdev, 'opt_type':opt_type}
