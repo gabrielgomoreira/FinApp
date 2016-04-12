@@ -42,20 +42,20 @@ def convert_parameters(inputs_from_user):
 	global call, american, ticker, t_time, h_period, stock_price, k_strike, vol
 	print('inside of convert_parameters')
 	print(inputs_from_user)
-	# american = inputs_from_user['american'].upper() in ['AMERICAN', 'AMER' '1']
-	# call = inputs_from_user['call'].upper() in ['CALL', 'C', '1']
-	# ticker = inputs_from_user['ticker'].upper()
-	# t_time = float(inputs_from_user['t_time'])
-	# k_strike = float(inputs_from_user['k_strike'])
+	american = inputs_from_user['american'].upper() in ['AMERICAN', 'AMER' '1']
+	call = inputs_from_user['call'].upper() in ['CALL', 'C', '1']
+	ticker = inputs_from_user['ticker'].upper()
+	t_time = float(inputs_from_user['t_time'])
+	k_strike = float(inputs_from_user['k_strike'])
 
-	# series_data = get_pandas_series('WIKI', ticker)
-	# stock_price = series_data.tail(1)[-1]
-	# amount_days = int((t_time*252))
-	# vol = get_vol_from_pandas(series_data, vol_horizon=amount_days, avg=1)
-	# return_params = {'american':american, 'call':call, 'ticker':ticker, 'stock_price':stock_price, 
-	# 				'k_strike':k_strike, 't_time':t_time, 'vol':vol, 'rate':rate, 'n_period':n_period, 'div':div}
+	series_data = get_pandas_series('WIKI', ticker)
+	stock_price = series_data.tail(1)[-1]
+	amount_days = int((t_time*252))
+	vol = get_vol_from_pandas(series_data, vol_horizon=amount_days, avg=1)
+	return_params = {'american':american, 'call':call, 'ticker':ticker, 'stock_price':stock_price, 
+					'k_strike':k_strike, 't_time':t_time, 'vol':vol, 'rate':rate, 'n_period':n_period, 'div':div}
 
-	# return return_params
+	return return_params
 
 
 def get_values():

@@ -20,7 +20,9 @@ def option_pricing_model():
 		# ticker = request.form['ticker']
 		# t_time = request.form['t_time']
 		# k_strike = request.form['k_strike']
-		convert_parameters(request.form)
+		user_input = dict((key, request.form.getlist(key)[0]) for key in request.form.keys())
+		curated_params = convert_parameters(user_input)
+		print(curated_params)
 
 		print('it gets here before redirect')
 		return redirect(url_for('option_pricing_view', american=american, call=call,
