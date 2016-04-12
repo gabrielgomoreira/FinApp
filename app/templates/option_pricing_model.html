@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+p {
+	font-size:160%;
+}
+
+</style>
+</head>
+<body>
+	<div class="jumbotron">
+		  <center> 
+		  <h1>Option Pricing Calculator</h1>
+		  <p>Binomial Pricing model and Black Scholes</p> 
+		  </center>
+	</div>
+	<div class="container">
+		<br>
+		<h4>Please enter inputs:</h4>
+		<br>
+		<form action="option_pricing_model" class="form-inline" method="post">
+			<input type="text" class="form-control" placeholder = "American or European?" name="american" value="{{request.form.american}}">
+
+			<input type="text" class="form-control" placeholder = "Call or Put?" name="call" value="{{request.form.call}}">
+
+			<input type="text" class="form-control" placeholder = "Ticker Symbol" name="ticker" value="{{request.form.ticker}}">
+
+			<input type="text" class="form-control" placeholder = "Time (t) till Expiration" name="t_time" value="{{request.form.t_time}}">
+
+			<input type="text" class="form-control" placeholder = "Strike Price (K)" name="k_strike" value="{{request.form.k_strike}}">
+
+			<input class="btn btn-default" type="submit" value="Calculate">
+		</form>
+	</div>
+</body>

@@ -17,6 +17,9 @@ nflCsApp.config(['$routeProvider',
       when('/option_pricing_model', {
         templateUrl: 'templates/option_pricing_model.html'
       }).
+      when('/option_pricing_view', {
+        templateUrl: 'templates/option_pricing_view.html'
+      }).
       when('/players/:playerName', {
         templateUrl: 'templates/single_player.html',
         controller: 'SinglePlayerCtrl'

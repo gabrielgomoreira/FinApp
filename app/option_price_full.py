@@ -12,7 +12,7 @@ t_time = 1
 
 stock_price = 250.07
 k_strike = 280
-n_period = 1
+n_period = 7
 rate = 0.08
 div = 0
 h_period = 0
@@ -37,15 +37,37 @@ def get_inputs():
 	k_strike = float(input('Enter K strike price (float) for your option: '))
 
 	return series_data
+
+def convert_parameters(inputs_from_user):
+	global call, american, ticker, t_time, h_period, stock_price, k_strike, vol
+	print('inside of convert_parameters')
+	print(inputs_from_user)
+	# american = inputs_from_user['american'].upper() in ['AMERICAN', 'AMER' '1']
+	# call = inputs_from_user['call'].upper() in ['CALL', 'C', '1']
+	# ticker = inputs_from_user['ticker'].upper()
+	# t_time = float(inputs_from_user['t_time'])
+	# k_strike = float(inputs_from_user['k_strike'])
+
+	# series_data = get_pandas_series('WIKI', ticker)
+	# stock_price = series_data.tail(1)[-1]
+	# amount_days = int((t_time*252))
+	# vol = get_vol_from_pandas(series_data, vol_horizon=amount_days, avg=1)
+	# return_params = {'american':american, 'call':call, 'ticker':ticker, 'stock_price':stock_price, 
+	# 				'k_strike':k_strike, 't_time':t_time, 'vol':vol, 'rate':rate, 'n_period':n_period, 'div':div}
+
+	# return return_params
+
+
 def get_values():
-	# series_data = get_inputs()
+	series_data = get_inputs()
 	option_object = Option(american=american,call=call, ticker=ticker, stock_price=stock_price, 
 					k_strike=k_strike, t_time=t_time, vol=vol, rate=rate, n_period=n_period, div=div)
 	
 	black_scholes_price = option_object.get_black_scholes_price()
-	print('Black Scholes Pirce %f ' %black_scholes_price)
+	print('Black Scholes Price %f ' %black_scholes_price)
 
 	binomial_model_price = option_object.get_binomial_model_price()
+	print('Binomial Model  Scholes Price %f ' %binomial_model_price)
 	opposite_opt_prices = option_object.get_from_put_call_parity()
 	print('Put-Call Parity: %s' % opposite_opt_prices)
 	print('Rand Vars and Prob: %s' % option_object.get_prob_from_zscore())
@@ -53,4 +75,4 @@ def get_values():
 
 
 
-get_values()
+# get_values()
