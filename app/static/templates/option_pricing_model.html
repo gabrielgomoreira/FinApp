@@ -10,13 +10,36 @@ p {
 </head>
 <body>
 	<div class="jumbotron">
-	  <center> 
-	  <h1>Option Pricing Model</h1>
-	  <p>Binomial Pricing model and Black Scholes</p> 
-	  </center>
+		  <center> 
+		  <h1>Option Pricing Calculator</h1>
+		  <p>Binomial Pricing model and Black Scholes</p> 
+		  </center>
 	</div>
+	<div class="container">
+		<br>
+		<h4>Please enter inputs:</h4>
+		<br>
+		<form action="/option_pricing_model" class="form-inline" method="post">
+			Required Fields: <br>
+			<input type="text" class="form-control" placeholder = "American or European?" name="american" required value="{{request.form.american}}">
 
-	<div class="row">
+			<input type="text" class="form-control" placeholder = "Call or Put?" name="call" required value="{{request.form.call}}">
 
+			<input type="text" class="form-control" placeholder = "Ticker Symbol" name="ticker" required value="{{request.form.ticker}}">
+
+			<input type="text" class="form-control" placeholder = "Time (t) till Expiration" name="t_time" required value="{{request.form.t_time}}">
+
+			<input type="text" class="form-control" placeholder = "Strike Price (K)" name="k_strike" required value="{{request.form.k_strike}}">
+			<br>
+			Optional Fields: <br>
+
+			<input type="number" class="form-control" placeholder = "Binomial Periods (n)" name="n_period" value="{{request.form.n_period}}">
+
+			<input type="text" class="form-control" placeholder = "Risk Free Rate (r)" name="rate" value="{{request.form.rate}}">
+
+			<input type="text" class="form-control" placeholder = "Dividend yield (d)" name="d"  value="{{request.form.d}}">
+
+			<input class="btn btn-default" type="submit" value="Calculate">
+		</form>
 	</div>
 </body>
