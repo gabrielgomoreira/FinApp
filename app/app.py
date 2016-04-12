@@ -1,6 +1,6 @@
 from flask import request, redirect, Flask, send_file, flash, render_template, url_for
 from flask_sqlalchemy import SQLAlchemy
-from option_price_full import convert_parameters
+from option_price_full import convert_parameters, calculate_opt_prices
 
 app = Flask(__name__, static_url_path='')
 
@@ -14,21 +14,11 @@ def index():
 @app.route('/option_pricing_model', methods=['GET', 'POST'])
 def option_pricing_model():
 	if request.method == 'POST': #do calculation
-		# print(request.form)
-		# american = request.form['american']
-		# call = request.form['call']
-		# ticker = request.form['ticker']
-		# t_time = request.form['t_time']
-		# k_strike = request.form['k_strike']
 		user_input = dict((key, request.form.getlist(key)[0]) for key in request.form.keys())
-		print('USER INPUT WAS')
-		print(user_input)
-		# curated_params = convert_parameters(user_input)
-		# print(curated_params)
+		curated_params = convert_parameters(user_input)
 
 		print('it gets here before redirect')
-		return redirect(url_for('option_pricing_view', american=american, call=call,
-				ticker=ticker, t_time=t_time, k_strike=k_strike))
+		return redirect(url_for('option_pricing_view', **curated_params))
 	
 	print('do i get here?')
 	return render_template('option_pricing_model.html')
@@ -37,12 +27,16 @@ def option_pricing_model():
 def option_pricing_view():
 	print('----- HEEEREE --------')
 	if request.method == "GET":
-		american = request.args['american']
-		call = request.args['call']
-		ticker = request.args['ticker']
-		t_time = request.args['t_time']
-		k_strike = request.args['k_strike']
-		return render_template('option_pricing_view.html')
+		print('args %s' % request.args)
+		option_parameters = dict((key, request.args.getlist(key)[0]) for key in request.args.keys())
+		print('option parementers --> %s' % option_parameters)
+		calculated_parameters = calculate_opt_prices(option_parameters)
+		print(' calculated params: %s' %calculated_parameters)
+		joined_parameters = {**option_parameters, **calculated_parameters}
+
+		print(joined_parameters)
+
+		return render_template('option_pricing_view.html' ,**joined_parameters)
 	# if request.method == 'POST':
 	# 	american = request.form['american']
 	# 	call = request.form['call']

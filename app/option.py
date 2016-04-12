@@ -27,19 +27,20 @@ class Option:
 
 	def __init__(self, american, call, ticker,
 				stock_price, k_strike, t_time, vol, rate, n_period, div):
-		self.american = american
-		self.call = call
+		self.american = (american == 'True')
+		self.call = (call == 'True')
 		self.ticker = ticker
-		self.stock_price = stock_price
-		self.k_strike = k_strike
-		self.t_time = t_time
-		self.vol = vol
-		self.rate = rate
-		self.div = div
-		self.n_period = n_period
-		self.h_period = (t_time/n_period)
+		self.stock_price = float(stock_price)
+		self.k_strike = float(k_strike)
+		self.t_time = float(t_time)
+		self.vol = float(vol)
+		self.rate = float(rate)
+		self.div = float(div)
+		self.n_period = int(n_period)
+		self.h_period = (float(t_time)/int(n_period))
 		self.black_scholes_price = 0
 		self.binomial_model_price = 0
+
 		self.black_scholes_opt = Black_Scholes(call=self.call, stock_price=self.stock_price, 
 	 									k_strike=self.k_strike, t_time=self.t_time,
 	 									vol=self.vol, rate=self.rate, div=self.div)
