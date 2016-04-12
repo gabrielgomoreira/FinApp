@@ -1,32 +1,164 @@
 <!DOCTYPE html>
-<html>
-<head>
-<style>
-p {
-	font-size:160%;
-}
+<html lang="en" ng-app="nflCsApp">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
 
-</style>
-</head>
-<body>
+    <title> {{ticker}} Option Price </title>
+    
+    <!-- <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css"> -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="css/app.css">
+    
+    <!-- <script src="bower_components/jquery/dist/jquery.js"></script> -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
+    <!-- <script src="bower_components/angular/angular.js"></script> -->
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular.min.js"></script>
+    <!-- <script src="bower_components/angular-route/angular-route.js"></script> -->
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular-route.min.js"></script>
+    <!-- <script src="bower_components/angular-resource/angular-resource.js"></script> -->
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular-resource.min.js"></script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular-route.js"></script>
+    
+    <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.11/css/jquery.dataTables.css">
+    <script type="text/javascript" charset="utf8" src="//cdn.datatables.net/1.10.11/js/jquery.dataTables.js"></script>
+  <script src="https://code.highcharts.com/highcharts.js"></script>
+  <script src="https://code.highcharts.com/modules/exporting.js"></script>
+    
+    <!-- Latest compiled and minified CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+  <!-- Optional theme -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+
+  <!-- Latest compiled and minified JavaScript -->
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+
+    <!-- <script src="utilities/GetPieChartData.js"></script> -->
+    <script src="js/app.js"></script>
+    <script src="js/controllers.js"></script>
+    <script src="js/directives.js"></script>
+    <script src="js/services.js"></script>
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+
+  <body>
 	<div class="jumbotron">
 		  <center> 
 		  <h1>Option Pricing Viewer</h1>
-		  <h2>  NOT IN STATIC Price for {{ ticker }} </h2>
-		  <p>Binomial Pricing model and Black Scholes</p> 
+		  <h2>{{t_time}} year(s) option for {{ ticker }} </h2>
+		  <h2>{{ticker}} last closing price was: {{stock_price}}</h2>
 		  </center>
 	</div>
-	<div class="container">
-		<br>
-		<h4>Please enter inputs:</h4>
-		<br>
-<!-- 		<form action="/option_pricing_model" class="form-inline" method="post">
-			<input type="text" class="form-control" placeholder = "American or European?" name="american" value="{{request.form.american}}">
-			<input type="text" class="form-control" placeholder = "Call or Put?" name="call" value="{{request.form.call}}">
-			<input type="text" class="form-control" placeholder = "Ticker Symbol" name="ticker" value="{{request.form.ticker}}">
-			<input type="text" class="form-control" placeholder = "Time (t) till Expiration" name="t_time" value="{{request.form.t_time}}">
-			<input type="text" class="form-control" placeholder = "Strike Price (K)" name="k_strike" value="{{request.form.k_strike}}">
-			<input class="btn btn-default" type="submit" value="Calculate">
-		</form> -->
+	<div class='row'>
+		<div class="col-md-6">
+				<h2> Values used to calculate based on your inputs </h2>           
+				<table class="table table-striped">
+				<thead>
+					<tr>
+						<th>Parameter Name</th>
+						<th>Input</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>American or European</td>
+						<td>{{opt_type}}</td>
+					</tr>
+					<tr>
+						<td>Type of Option</td>
+						<td>{{opt_name}}</td>
+					</tr>
+					<tr>
+						<td>Ticker Symbol</td>
+						<td>{{ticker}}</td>
+					</tr>
+					<tr>
+						<td>Strike Price (K)</td>
+						<td>${{k_strike}}</td>
+					</tr>
+					<tr>
+						<td>Time (t) till expiration</td>
+						<td>{{t_time}}</td>
+					</tr>			
+					<tr>
+						<td>Binomial Periods (n)</td>
+						<td>{{n_period}}</td>
+					</tr>
+					<tr>
+						<td>Risk Free Interest Rate (r)</td>
+						<td>{{rate}}</td>
+					</tr>
+					<tr>
+						<td>Divident Yield (d)</td>
+						<td>{{div}}</td>
+					</tr>
+
+
+				</tbody>
+				</table>
+		</div>
+		<div class="col-md-6">
+				<h2> Calculated values based on your inputs </h2>           
+				<table class="table table-striped">
+				<thead>
+					<tr>
+						<th>Parameter Name</th>
+						<th>Calculated Value</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>Price of {{opt_name}} using Black Scholes</td>
+						<td>${{black_scholes_price}}</td>
+					</tr>
+					<tr>
+						<td>Price of {{opt_name}} using {{n_period}} Binomial Periods</td>
+						<td>${{binomial_model_price}}</td>
+					</tr>
+					<tr>
+						<td>Price of {{opt_inv_name}} using Put-Call Parity with Black Scholes Price</td>
+						<td>${{opposite_black_scholes_price}}</td>
+					</tr>
+					<tr>
+						<td>Price of {{opt_inv_name}} using Put-Call Parity with {{n_period}} Binomial Periods</td>
+						<td>${{opposite_binomial_model_price}}</td>
+					</tr>
+					<tr>
+						<td>{{ticker}}'s Volatility for the past {{t_time}} year(s) </td>
+						<td>{{vol}}</td>
+					</tr>			
+					<tr>
+						<td>Mean of S_t leaf values from {{n_period}} Binomial Periods</td>
+						<td>${{mean}}</td>
+					</tr>
+					<tr>
+						<td>Standard Deviation of S_t leaf values from {{n_period}} Binomial Periods</td>
+						<td>${{stdev}}</td>
+					</tr>
+					<tr>
+						<td>Probability of reaching ${{k_strike}} using Z-Score</td>
+						<td>{{prob}}</td>
+					</tr>
+
+
+				</tbody>
+				</table>
+		</div>
 	</div>
-</body>
+
+
+
+  </body>
+</html>

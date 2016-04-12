@@ -52,12 +52,9 @@ def convert_parameters(inputs_from_user):
 	rate = 0.03 if not inputs_from_user['rate'] else float(inputs_from_user['rate'] )
 	div = 0 if not inputs_from_user['div'] else float(inputs_from_user['div'] )
 
-	series_data = get_pandas_series('WIKI', ticker)
-	stock_price = series_data.tail(1)[-1]
-	amount_days = int((t_time*252))
-	vol = get_vol_from_pandas(series_data, vol_horizon=amount_days, avg=1)
-	return_params = {'american':american, 'call':call, 'ticker':ticker, 'stock_price':stock_price, 
-					'k_strike':k_strike, 't_time':t_time, 'vol':vol, 'rate':rate, 'n_period':n_period, 'div':div}
+
+	return_params = {'american':american, 'call':call, 'ticker':ticker, 'k_strike':k_strike, 't_time':t_time, 
+						'rate':rate, 'n_period':n_period, 'div':div}
 
 	return return_params
 
@@ -79,7 +76,18 @@ def get_values():
 
 def calculate_opt_prices(option_parameters):
 
+
+	series_data = get_pandas_series('WIKI', option_parameters['ticker'])
+	stock_price = series_data.tail(1)[-1]
+	amount_days = int((t_time*252))
+	
+	vol = get_vol_from_pandas(series_data, vol_horizon=amount_days, avg=1)
+
+	option_parameters['stock_price'] = stock_price
+	option_parameters['vol'] = vol
+
 	option_object = Option(**option_parameters)
+
 
 	black_scholes_price = option_object.get_black_scholes_price()
 	binomial_model_price = option_object.get_binomial_model_price()
@@ -92,9 +100,14 @@ def calculate_opt_prices(option_parameters):
 	mean = rand_vars['mean']
 	prob = rand_vars['prob']
 	stdev = rand_vars['stdev']
+	opt_type = 'American' if american else 'European'
+	opt_name = 'Call' if call else 'Put'
+	opt_inv_name = 'Put' if call else 'Call'
 
-	return {'black_scholes_price': black_scholes_price, 'binomial_model_price': binomial_model_price, 'opposite_black_scholes_price': opposite_black_scholes_price,
-			'opposite_binomial_model_price': opposite_binomial_model_price,	'mean': mean, 'prob': prob, 'stdev': stdev}
+	return {'stock_price':stock_price, 'vol':vol, 'series_data': series_data, 'black_scholes_price': black_scholes_price, 
+			'binomial_model_price': binomial_model_price, 'opposite_black_scholes_price': opposite_black_scholes_price,
+			'opposite_binomial_model_price': opposite_binomial_model_price,	'opt_name': opt_name, 'opt_inv_name': opt_inv_name,
+			'mean': mean, 'prob': prob, 'stdev': stdev, 'opt_type':opt_type}
 
 
 

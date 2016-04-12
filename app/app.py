@@ -37,7 +37,7 @@ def option_pricing_view():
 		print(joined_parameters)
 
 		return render_template('option_pricing_view.html' ,**joined_parameters)
-
+		
 
 if __name__ == '__main__':
 	app.run(host='127.0.0.1')
