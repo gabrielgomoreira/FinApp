@@ -32,7 +32,12 @@ def option_pricing_view():
 		print('option parementers --> %s' % option_parameters)
 		calculated_parameters = calculate_opt_prices(option_parameters)
 		print(' calculated params: %s' %calculated_parameters)
-		joined_parameters = {**option_parameters, **calculated_parameters}
+
+		joined_parameters = dict(option_parameters)
+		joined_parameters.update(calculated_parameters)
+
+		# joined_parameters = {**option_parameters, **calculated_parameters}
+		# joined_parameters = 
 
 		print(joined_parameters)
 
