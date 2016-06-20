@@ -1,10 +1,10 @@
 from flask import request, redirect, Flask, send_file, flash, render_template, url_for
-from flask_sqlalchemy import SQLAlchemy
+# from flask_sqlalchemy import SQLAlchemy
 from option_price_full import convert_parameters, calculate_opt_prices
 
 app = Flask(__name__, static_url_path='')
 
-db = SQLAlchemy(app)
+# db = SQLAlchemy(app)
 
 @app.route('/')
 def index():
